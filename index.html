@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>FullscreenCamera</title>
+</head>
+<style type="text/css">
+    #video {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -100;
+    }
+
+    #start {
+        border: none;
+        background: #404040;
+        color: #ffffff !important;
+        font-weight: 100;
+        padding: 20px;
+        text-transform: uppercase;
+        border-radius: 6px;
+        display: inline-block;
+        transition: all 0.3s ease 0s;
+    }
+
+    #start:hover {
+        color: #404040 !important;
+        font-weight: 700 !important;
+        letter-spacing: 3px;
+        background: none;
+        -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+        -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+        transition: all 0.3s ease 0s;
+    }
+</style>
+
+<body>
+
+    <video id="video" autoplay playsinline></video>
+    <div style="text-align:center;margin-top:100px;">
+        <button id="start">START CAMERA</button>
+    </div>
+    <script>
+        'use strict';
+        // カメラデバイスの取得成功
+        function handleSuccess(stream) {
+            const video = document.querySelector('video');
+            video.srcObject = stream;
+        }
+
+        // カメラデバイスの取得失敗
+        function handleError(error) {
+            console.error(error);
+        }
+
+        async function init(e) {
+            const constraints = {
+                audio: false, // audioは使用しない
+                video: true
+            };
+
+            try {
+                // カメラデバイスの取得try
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                handleSuccess(stream);
+            } catch (e) {
+                handleError(e);
+            }
+        }
+
+        // start ボタンを押したらカメラでの撮影を開始する。
+        document.querySelector('#start').addEventListener('click', function (e) {
+            init(e);
+            //ボタンを隠す
+            document.getElementById("start").style.visibility = "hidden";
+        });
+    </script>
+</body>
+
+</html>
